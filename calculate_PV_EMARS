@@ -40,19 +40,19 @@ if __name__ == "__main__":
     kappa = 1/4.0
     p0 = 610.
     
-    inpath = '/export/anthropocene/array-01/xz19136/OpenMARS/MY28-32/'
+    inpath = '/disco/share/sh1293/EMARS_data/'
     #infiles = os.listdir(inpath)
     home = os.getenv("HOME")
     os.chdir(inpath)
-    infiles = glob.glob('*open*')
+    infiles = glob.glob('emars*')
     for f in infiles:
         print(f)
     os.chdir(home)
-    isenpath = '/export/anthropocene/array-01/xz19136/OpenMARS/Isentropic/'
-    isopath = '/export/anthropocene/array-01/xz19136/OpenMARS/Isobaric/'
+    isenpath = '/disco/share/sh1293/EMARS_data/Isentropic/'
+    isopath = '/disco/share/sh1293/EMARS_data/Isobaric/'
     #inpath = ''
     #outpath = 'MACDA_data/'
-    figpath = 'OpenMARS_figs/'
+    #figpath = 'OpenMARS_figs/'
     
     plevs = plev1+plev2+plev3
     
@@ -68,8 +68,10 @@ if __name__ == "__main__":
         d = xr.concat(ens_list, dim='lon')
     
         d = d.astype('float32')
-        d = d[['Ls','MY','ps','temp','u','v']]
+        d = d[['Ls','MY','ps','T','U','V']]
+	d = d.rename_vars(['T' : 'temp', 'U' : 'u', 'V' : 'v'])
     
+#need to adjust this to give the EMARS version
         prs = calculate_pfull(d.ps, d.lev)
         prs = prs.transpose('time','lev','lat','lon')
     
